@@ -1,7 +1,6 @@
 package com.fazbear.notificaciones.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /** Evento recibido desde RabbitMQ (publicado por ms-orden). */
 public class PedidoEvent {
@@ -11,7 +10,7 @@ public class PedidoEvent {
     private String emailUsuario;
     private BigDecimal total;
     private String estado;
-    private LocalDateTime fechaCreacion;
+    private String fechaCreacion;
 
     public PedidoEvent() {}
 
@@ -30,6 +29,6 @@ public class PedidoEvent {
     public String getEstado()              { return estado; }
     public void setEstado(String v)        { this.estado = v; }
 
-    public LocalDateTime getFechaCreacion()        { return fechaCreacion; }
-    public void setFechaCreacion(LocalDateTime v)  { this.fechaCreacion = v; }
+    public String getFechaCreacion()        { return fechaCreacion; }
+    public void setFechaCreacion(String v)  { this.fechaCreacion = v; }
 }
