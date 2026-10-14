@@ -1,8 +1,10 @@
 package com.fazbear.notificaciones.model;
 
 import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /** Evento recibido desde RabbitMQ (publicado por ms-orden). */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PedidoEvent {
 
     private Long pedidoId;
