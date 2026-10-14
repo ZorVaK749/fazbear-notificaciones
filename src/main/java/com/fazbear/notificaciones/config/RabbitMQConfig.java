@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String EXCHANGE    = "pedidos.exchange";
-    public static final String QUEUE       = "pedido.creado.queue";
+    public static final String QUEUE       = "pedido.creado.notificaciones.queue";
     public static final String ROUTING_KEY = "pedido.creado";
 
     @Bean
@@ -25,7 +25,16 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue pedidoCreadoQueue() {
-        return QueueBuilder.durable(QUEUE).build();
+        return QueueBuilder.durable(QUEUE)
+            .deadLetterExchange("pedidos.dlx").deadLetterRoutingKey(QUEUE).build();
+    }
+
+    @Bean
+    public Declarables deadLetters() {
+        DirectExchange exchange = new DirectExchange("pedidos.dlx", true, false);
+        Queue queue = QueueBuilder.durable(QUEUE + ".dlq").build();
+        return new Declarables(exchange, queue,
+            BindingBuilder.bind(queue).to(exchange).with(QUEUE));
     }
 
     @Bean

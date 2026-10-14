@@ -3,6 +3,7 @@ package com.fazbear.notificaciones.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,8 @@ public class EmailService {
             log.info("Correo de confirmación enviado a {} para pedidoId={}", destinatario, pedidoId);
         } catch (Exception e) {
             log.error("Error al enviar correo a {}: {}", destinatario, e.getMessage());
+            // Conservar el evento en la DLQ en vez de confirmar un correo fallido.
+            throw new AmqpRejectAndDontRequeueException("No se pudo enviar la confirmación", e);
         }
     }
 

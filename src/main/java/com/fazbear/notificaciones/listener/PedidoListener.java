@@ -1,6 +1,7 @@
 package com.fazbear.notificaciones.listener;
 
 import com.fazbear.notificaciones.model.PedidoEvent;
+import com.fazbear.notificaciones.config.RabbitMQConfig;
 import com.fazbear.notificaciones.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class PedidoListener {
         this.emailService = emailService;
     }
 
-    @RabbitListener(queues = "pedido.creado.queue")
+    @RabbitListener(queues = RabbitMQConfig.QUEUE)
     public void onPedidoCreado(PedidoEvent evento) {
         log.info("Mensaje recibido de RabbitMQ: pedidoId={}, email={}",
             evento.getPedidoId(), evento.getEmailUsuario());
