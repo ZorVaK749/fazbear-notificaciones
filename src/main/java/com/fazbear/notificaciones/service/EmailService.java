@@ -47,6 +47,17 @@ public class EmailService {
         }
     }
 
+    /** Prueba SMTP directa: no publica eventos ni simula una compra. */
+    public void enviarPrueba(String destinatario) {
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setFrom(fromEmail);
+        mensaje.setTo(destinatario);
+        mensaje.setSubject("Pedidos360 — prueba de correo EV2");
+        mensaje.setText("Prueba de envío SMTP de ms-notificaciones.\n"
+            + "Este mensaje no corresponde a una compra y no modifica pedidos, stock ni reportes.");
+        mailSender.send(mensaje);
+    }
+
     private String buildEmailBody(Long pedidoId, BigDecimal total) {
         return """
                 ¡Hola, amigo de Freddy Fazbear's Pizza!

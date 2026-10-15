@@ -15,6 +15,18 @@ import static org.mockito.Mockito.*;
 
 class EmailServiceTest {
     @Test
+    void pruebaSmtpEsIndependienteDeCompra() {
+        JavaMailSender sender = mock(JavaMailSender.class);
+        EmailService service = new EmailService(sender);
+        ReflectionTestUtils.setField(service, "fromEmail", "sender@example.com");
+        service.enviarPrueba("user@example.com");
+        var captor = org.mockito.ArgumentCaptor.forClass(SimpleMailMessage.class);
+        verify(sender).send(captor.capture());
+        org.junit.jupiter.api.Assertions.assertEquals("user@example.com", captor.getValue().getTo()[0]);
+        org.junit.jupiter.api.Assertions.assertTrue(captor.getValue().getText().contains("no modifica"));
+    }
+
+    @Test
     void smtpFailureIsNotAcknowledgedAsSuccess() {
         JavaMailSender sender = mock(JavaMailSender.class);
         doThrow(new MailSendException("SMTP unavailable")).when(sender).send(any(SimpleMailMessage.class));
