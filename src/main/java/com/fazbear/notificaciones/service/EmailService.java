@@ -9,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 @Service
 public class EmailService {
@@ -59,6 +61,8 @@ public class EmailService {
     }
 
     private String buildEmailBody(Long pedidoId, BigDecimal total) {
+        var format = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-CL"));
+        format.setMaximumFractionDigits(2);
         return """
                 ¡Hola, amigo de Freddy Fazbear's Pizza!
 
@@ -66,7 +70,7 @@ public class EmailService {
 
                 Detalles:
                   - Número de Pedido: #%d
-                  - Total:            $%.2f
+                  - Total:            %s CLP
                   - Estado:           PENDIENTE
 
                 Nuestros animatrónicos ya están preparando tu orden.
@@ -74,6 +78,6 @@ public class EmailService {
 
                 ¡Que tengas una noche increíble!
                 — El equipo de Freddy Fazbear's Pizza 🐻🍕
-                """.formatted(pedidoId, total);
+                """.formatted(pedidoId, format.format(total));
     }
 }
